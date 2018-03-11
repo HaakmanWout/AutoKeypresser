@@ -36,11 +36,21 @@ public class Main extends JFrame {
     private static final long serialVersionUID = 1L;
     private static boolean loop = false;
     
+    /*
+     * Class method called 'Main', being called by the actual Main method. Mustn't be too confusing right?
+     * Throws general Exception so I don't have to deal with that too many times.
+     */
     public Main() throws Exception {
-    	
+    	/*
+    	 * Sets the look and feel of the UI to the standard OS look and feel for a more native, less java shitty experience.
+    	 */
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        
+        /*
+         * The 'Close' Swing button, to manually close Auto Keypresser. 
+         * Still debating wether I should delete it since it has no real use. 
+         * I feel like using the standard closing button is more intuitive than pressing the close button.
+         */
         JButton close = new JButton("Close");
         close.setToolTipText("Close Auto Keypresser");
         close.addActionListener(new ActionListener(){
@@ -50,6 +60,9 @@ public class Main extends JFrame {
             }
         });
         
+        /*
+         * The 'Start' Swing button, used to start the automatic keypressing loop.
+         */
         JButton start = new JButton("Start");
         start.setToolTipText("Start automatic keypress loop");
         start.addActionListener(new ActionListener(){
@@ -59,6 +72,9 @@ public class Main extends JFrame {
             }
         });
 
+        /*
+         * The 'Stop' Swing button, used to stop the automatic keypressing loop.
+         */
         JButton stop = new JButton("Stop");
         stop.setToolTipText("Stop automatic keypress loop");
         stop.addActionListener(new ActionListener(){
@@ -68,10 +84,18 @@ public class Main extends JFrame {
             }
         });
         
-        JTextArea info = new JTextArea("To use Auto Keypresser for your own purposes," + System.lineSeparator() + "please click on 'Change keys' to configure the key chain.");
+        /*
+         * The 'Info' Swing text area, displays information for the user to assist with using the software.
+         */
+        JTextArea info = new JTextArea("To use Auto Keypresser for your own purposes," + System.lineSeparator() + "please click on 'Change keys' to configure the key chain." + 
+        									System.lineSeparator() + "To start or stop the Auto Keypresser, press the homonymous button");
         info.setToolTipText("Information");
         info.setEditable(false);
         
+        /*
+         * All of this below is used to designate the Swing UI components to a predefined position.
+         * I used BoxLayout so I can stack the components on top and next to each other for a better flow.
+         */
         Box top = Box.createHorizontalBox();
         top.add(info);
         
@@ -93,6 +117,9 @@ public class Main extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(left, BorderLayout.CENTER);
         
+        /*
+         * Initializing the JFrame that this Class inherites.
+         */
         add(panel);
         setTitle("Auto Keypresser");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,8 +128,11 @@ public class Main extends JFrame {
         setVisible(true);
         setAlwaysOnTop(true);
         
+        /*
+         * Using the Robot class to control Keyboard input.
+         * Sleeping the loop so any software doens't overflow and can react to the input that it takes in from Auto Keypresser.
+         */
         Robot robot = new Robot();
-        
         while(true){
             if(loop){
                 robot.keyPress(KeyEvent.VK_ENTER);
@@ -119,7 +149,10 @@ public class Main extends JFrame {
             Thread.sleep(250); 
         }
     }
-
+    
+    /*
+     * The main function/method, opens the 'Main' method from the 'Main' class. Since 'Main' throws an Exception, it has to take in an Exception e.
+     */
     public static void main(String[] args) {
         try {
             new Main();
