@@ -64,7 +64,7 @@ public class Main extends JFrame {
          * The 'Start' Swing button, used to start the automatic keypressing loop.
          */
         JButton start = new JButton("Start");
-        start.setToolTipText("Start automatic keypress loop");
+        start.setToolTipText("Start automatic keypressing loop");
         start.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -76,7 +76,7 @@ public class Main extends JFrame {
          * The 'Stop' Swing button, used to stop the automatic keypressing loop.
          */
         JButton stop = new JButton("Stop");
-        stop.setToolTipText("Stop automatic keypress loop");
+        stop.setToolTipText("Stop automatic keypressing loop");
         stop.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,11 +85,56 @@ public class Main extends JFrame {
         });
         
         /*
+         * Here are all the Swing components respectively.
+         */
+        
+        JTextArea changeKeysInfo = new JTextArea("Specify the keys used in the keypressing loop");
+        changeKeysInfo.setEditable(false);
+        
+        //ADD BUTTON TO ADD NEW KEYS TO ARRAY, DISPLAY ON JPANEL.
+        
+        JButton changeKeysApply = new JButton("Apply changes");
+        changeKeysApply.setToolTipText("Apply changes made and close");
+        changeKeysApply.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//SET PANEL VISIBILITY TO FALSE, REVALIDATE THE PANEL AND MAKE SURE THE KEYS ARE ADDED TO THE ARRAY "addKeysToArray".
+			}
+        });
+        
+        /*
+         * The 'Change Keys' JPanel selection panel, used to change the key preset for the automatic keypressing loop.
+         * 
+         * Enables speficiations of the keypress loop, where you can insert the different keys the software has to press, hold and release. 
+         * There also is a 'wait' block where the user can specify how long the keypressing loop has to wait before entering the next key.
+         */
+        
+        Box changeKeysLeft = Box.createVerticalBox();
+        changeKeysLeft.add(changeKeysInfo);
+        
+        JPanel changeKeysPanel = new JPanel();
+        changeKeysPanel.setLayout(new BorderLayout());
+        changeKeysPanel.add(changeKeysLeft);
+        
+        /*
+         * The 'Change Keys' Swing button, used to change the key preset for the automatic keypressing loop.
+         * 
+         * When the button is pressed it shows the selection JPanel.
+         */
+        JButton changeKeys = new JButton("Change keys");
+        changeKeys.setToolTipText("Edit the automatic keypressing loop to specify the keys that have to be pressed");
+        changeKeys.addActionListener(new ActionListener(){
+        	@Override
+        	public void actionPerformed(ActionEvent e){
+        		
+        	}
+        });
+        
+        /*
          * The 'Info' Swing text area, displays information for the user to assist with using the software.
          */
         JTextArea info = new JTextArea("To use Auto Keypresser for your own purposes," + System.lineSeparator() + "please click on 'Change keys' to configure the key chain." + 
         									System.lineSeparator() + "To start or stop the Auto Keypresser, press the homonymous button");
-        info.setToolTipText("Information");
         info.setEditable(false);
         
         /*
