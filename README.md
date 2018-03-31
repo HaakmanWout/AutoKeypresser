@@ -1,6 +1,7 @@
 # AutoKeypresser
 
-This software application can be used for repetitive actions concerning Keyboard input. It enables the user to an easy-to-use method of using custom keysets.
+This software application can be used for repetitive actions concerning Keyboard input. 
+It enables the user to an easy-to-use method of using custom keysets.
 
 Features:
 -Window at the top-left of the screen with all the options.
