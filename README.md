@@ -1,15 +1,15 @@
 # AutoKeypresser
 
-This software application can be used for repetitive actions concerning Keyboard input. 
-It enables the user to an easy-to-use method of using custom keysets.
+This software application can be used for repetitive actions concerning Keyboard input.<br />
+It enables the user to an easy-to-use method of using custom keysets.<br />
 
-Features:
--Window at the top-left of the screen with all the options.
--Start and Stop the automatic keypressing loop with two buttons.
--Change the keys to a custom set of keys, with specified wait-times.
+Features:<br />
+-Window at the top-left of the screen with all the options.<br />
+-Start and Stop the automatic keypressing loop with two buttons.<br />
+-Change the keys to a custom set of keys, with specified wait-times.<br />
 
-Made by:
-Wout Haakman
-E-mail:   wouthaakman@hotmail.com
-Github:   HaakmanWout
-Reddit:   u/haakmanwout
+Made by:<br />
+Wout Haakman<br />
+E-mail:   wouthaakman@hotmail.com<br />
+Github:   HaakmanWout<br />
+Reddit:   u/haakmanwout<br />
