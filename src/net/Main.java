@@ -12,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -35,6 +36,7 @@ public class Main extends JFrame {
 	
     private static final long serialVersionUID = 1L;
     private static boolean loop = false;
+    private static String keyset = "E:ctrl,E:v,D:ctrl,D:v,W:250,E:enter,D:enter,W:250,E:enter,D:enter";
     
     /*
      * Class method called 'Main', being called by the actual Main method. Mustn't be too confusing right?
@@ -85,56 +87,28 @@ public class Main extends JFrame {
         });
         
         /*
-         * Here are all the Swing components respectively.
-         */
-        
-        JTextArea changeKeysInfo = new JTextArea("Specify the keys used in the keypressing loop");
-        changeKeysInfo.setEditable(false);
-        
-        //ADD BUTTON TO ADD NEW KEYS TO ARRAY, DISPLAY ON JPANEL.
-        
-        JButton changeKeysApply = new JButton("Apply changes");
-        changeKeysApply.setToolTipText("Apply changes made and close");
-        changeKeysApply.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//SET PANEL VISIBILITY TO FALSE, REVALIDATE THE PANEL AND MAKE SURE THE KEYS ARE ADDED TO THE ARRAY "addKeysToArray".
-			}
-        });
-        
-        /*
-         * The 'Change Keys' JPanel selection panel, used to change the key preset for the automatic keypressing loop.
-         * 
-         * Enables speficiations of the keypress loop, where you can insert the different keys the software has to press, hold and release. 
-         * There also is a 'wait' block where the user can specify how long the keypressing loop has to wait before entering the next key.
-         */
-        
-        Box changeKeysLeft = Box.createVerticalBox();
-        changeKeysLeft.add(changeKeysInfo);
-        
-        JPanel changeKeysPanel = new JPanel();
-        changeKeysPanel.setLayout(new BorderLayout());
-        changeKeysPanel.add(changeKeysLeft);
-        
-        /*
          * The 'Change Keys' Swing button, used to change the key preset for the automatic keypressing loop.
          * 
-         * When the button is pressed it shows the selection JPanel.
+         * When the button is pressed it shows the input dialog, showing the current key set loop, the format for putting in custom key set and 'Apply' and 'Cancel' button.
          */
         JButton changeKeys = new JButton("Change keys");
         changeKeys.setToolTipText("Edit the automatic keypressing loop to specify the keys that have to be pressed");
         changeKeys.addActionListener(new ActionListener(){
         	@Override
         	public void actionPerformed(ActionEvent e){
-        		
+        		String newKeyset = JOptionPane.showInputDialog(null, "Current key set:    " + keyset + System.lineSeparator() + 
+        															 "E:      -> enable key" + System.lineSeparator() + "D:     -> disable key" + System.lineSeparator() +
+        															 "W:    -> wait in ms" + System.lineSeparator() + ",        -> break to next key", "Change key set", JOptionPane.PLAIN_MESSAGE);
+        		if(newKeyset != null && newKeyset.length() >= 2)
+        			keyset = newKeyset;
         	}
         });
         
         /*
          * The 'Info' Swing text area, displays information for the user to assist with using the software.
          */
-        JTextArea info = new JTextArea("To use Auto Keypresser for your own purposes," + System.lineSeparator() + "please click on 'Change keys' to configure the key chain." + 
-        									System.lineSeparator() + "To start or stop the Auto Keypresser, press the homonymous button");
+        JTextArea info = new JTextArea("To use Auto Keypresser for your own purposes," + System.lineSeparator() + 
+        							   "please click on 'Change keys' to configure the key chain." + System.lineSeparator() + "To start or stop the Auto Keypresser, press the homonymous button");
         info.setEditable(false);
         
         /*
@@ -153,6 +127,7 @@ public class Main extends JFrame {
         bottom.add(Box.createRigidArea(new Dimension(10, 40)));
         bottom.add(stop);
         bottom.add(Box.createRigidArea(new Dimension(10, 40)));
+        bottom.add(changeKeys);
     
         Box left = Box.createVerticalBox();
         left.add(top);
@@ -180,19 +155,128 @@ public class Main extends JFrame {
         Robot robot = new Robot();
         while(true){
             if(loop){
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
-                    Thread.sleep(250);
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-                robot.keyRelease(KeyEvent.VK_V);
-                    Thread.sleep(250);
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
+            	String[] keyArray = keyset.split(",");
+            	for(int i = 0; i < keyArray.length; i++){
+            		String[] dubs = keyArray[i].split(":");
+            		if(dubs[0].equals("E")){
+            			robot.keyPress(getKey(dubs[1]));
+            		}else if(dubs[0].equals("D")){
+            			robot.keyRelease(getKey(dubs[1]));
+            		}else if(dubs[0].equals("W")){
+            			Thread.sleep(Long.parseLong(dubs[1]));
+            		}
+            	}
             } 
             Thread.sleep(250); 
         }
+    }
+    
+    /*
+     * Method to convert a string to a KeyEvent integer.
+     * I hate myself for implementing this, there must be a better way to approach all of this
+     */
+    
+    //I NEED TO THINK OF SOMETHING BETTER
+    private int getKey(String key){
+    	int keyEvent = KeyEvent.VK_E;
+    	switch(key){
+    		case "ctrl":	keyEvent = KeyEvent.VK_CONTROL;
+    						break;
+    		case "enter":	keyEvent = KeyEvent.VK_ENTER;
+							break;
+    		case "tab":		keyEvent = KeyEvent.VK_TAB;
+							break;
+    		case "backspace": keyEvent = KeyEvent.VK_BACK_SPACE;
+    						break;
+    		case "caps lock": keyEvent = KeyEvent.VK_CAPS_LOCK;
+    						break;
+    		case "semicolon": keyEvent = KeyEvent.VK_SEMICOLON;
+    						break;
+    		case "up":		keyEvent = KeyEvent.VK_UP;
+    						break;
+    		case "down":	keyEvent = KeyEvent.VK_DOWN;
+							break;
+    		case "left":	keyEvent = KeyEvent.VK_LEFT;
+							break;
+    		case "right":	keyEvent = KeyEvent.VK_RIGHT;
+							break;
+    		case "0":		keyEvent = KeyEvent.VK_0;
+							break;
+    		case "1":		keyEvent = KeyEvent.VK_1;
+							break;
+    		case "2":		keyEvent = KeyEvent.VK_2;
+							break;
+    		case "3":		keyEvent = KeyEvent.VK_3;
+							break;
+    		case "4":		keyEvent = KeyEvent.VK_4;
+							break;
+    		case "5":		keyEvent = KeyEvent.VK_5;
+							break;
+    		case "6":		keyEvent = KeyEvent.VK_6;
+							break;
+    		case "7":		keyEvent = KeyEvent.VK_7;
+							break;
+    		case "8":		keyEvent = KeyEvent.VK_8;
+							break;
+    		case "9":		keyEvent = KeyEvent.VK_9;
+							break;
+    		case "a":		keyEvent = KeyEvent.VK_A;
+							break;
+    		case "b":		keyEvent = KeyEvent.VK_B;
+							break;
+    		case "c":		keyEvent = KeyEvent.VK_C;
+							break;
+    		case "d":		keyEvent = KeyEvent.VK_D;
+							break;
+    		case "e":		keyEvent = KeyEvent.VK_E;
+							break;
+    		case "f":		keyEvent = KeyEvent.VK_F;
+							break;
+    		case "g":		keyEvent = KeyEvent.VK_G;
+							break;
+    		case "h":		keyEvent = KeyEvent.VK_H;
+							break;
+    		case "i":		keyEvent = KeyEvent.VK_I;
+							break;
+    		case "j":		keyEvent = KeyEvent.VK_J;
+							break;
+    		case "k":		keyEvent = KeyEvent.VK_K;
+							break;
+    		case "l":		keyEvent = KeyEvent.VK_L;
+							break;
+    		case "m":		keyEvent = KeyEvent.VK_M;
+							break;
+    		case "n":		keyEvent = KeyEvent.VK_N;
+							break;
+    		case "o":		keyEvent = KeyEvent.VK_O;
+							break;
+    		case "p":		keyEvent = KeyEvent.VK_P;
+							break;
+    		case "q":		keyEvent = KeyEvent.VK_Q;
+							break;
+    		case "r":		keyEvent = KeyEvent.VK_R;
+							break;
+    		case "s":		keyEvent = KeyEvent.VK_S;
+							break;
+    		case "t":		keyEvent = KeyEvent.VK_T;
+							break;
+    		case "u":		keyEvent = KeyEvent.VK_U;
+							break;
+    		case "v":		keyEvent = KeyEvent.VK_V;
+    						break;
+    		case "w":		keyEvent = KeyEvent.VK_W;
+							break;
+    		case "x":		keyEvent = KeyEvent.VK_X;
+    						break;
+    		case "y":		keyEvent = KeyEvent.VK_Y;
+							break;
+    		case "z":		keyEvent = KeyEvent.VK_Z;
+							break;
+    		default:		keyEvent = KeyEvent.VK_CONTROL;
+    						break;
+    	}
+    	
+    	return keyEvent;
     }
     
     /*
